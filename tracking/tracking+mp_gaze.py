@@ -18,6 +18,17 @@ def predict_gaze(frame, bbox):
 		gaze = None
 	return gaze
 
+def enlarge_bbox(bbox):
+	#.Enlarge bounding box by 20% on each side
+	xmin, ymin, xmax, ymax = bbox
+	width = xmax - xmin
+	height = ymax - ymin
+	new_xmin = max(0, xmin - int(width * 0.3))
+	new_ymin = max(0, ymin - int(height * 0.3))
+	new_xmax = min(640, xmax + int(width * 0.3))
+	new_ymax = min(480, ymax + int(height * 0.3))
+	return np.array([new_xmin, new_ymin, new_xmax, new_ymax]) 
+
 def parse_args():
 	ap = argparse.ArgumentParser()
 	ap.add_argument("-c", "--confidence", type=float, default=0.5, help="minimum probability to filter weak detections")
@@ -37,8 +48,8 @@ mp_face_mesh = mp.solutions.face_mesh
 face_mesh = mp_face_mesh.FaceMesh(
 		max_num_faces=1,  # number of faces to track in each frame
 		refine_landmarks=True,  # includes iris landmarks in the face mesh model
-		min_detection_confidence=0.5,
-		min_tracking_confidence=0.5) 
+		min_detection_confidence=0.1,
+		min_tracking_confidence=0.3) 
 
 if args['input'] == 0:
 	vs = VideoStream(src=0).start()
@@ -76,6 +87,7 @@ while True:
 	for (objectID, object_data) in objects.items():
 		centroid = object_data[0]
 		bbox = object_data[1]
+		bbox = enlarge_bbox(bbox)
 
 		#. Predict gaze
 		gaze = predict_gaze(frame, bbox)
@@ -93,6 +105,7 @@ while True:
 			cv2.arrowedLine(frame, (centroid[0], centroid[1]), (centroid[0] + int(gaze[0]), centroid[1] + int(gaze[1])), (0, 0, 255), 2)
 
 	#. show the output frame		
+	frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 	fps = 1.0 / (time.time() - start)
 	cv2.rectangle(frame, (0, 0), (100, 40), (255, 255, 255), -1)
 	cv2.putText(frame, "FPS: {:.0f}".format(fps), (5, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1)

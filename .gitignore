@@ -1,2 +1,7 @@
 gaze_estimation/
 __pycache__/
+airnd/
+wandb/
+dataset/
+datasets/
+checkpoints/

@@ -3,7 +3,7 @@ import torch
 import argparse
 import sys
 sys.path.insert(0, '.')
-from models.GenderNet import GenderNet
+from models.AgeGenderNet import GenderNet
 
 def parse_args():
     parser = argparse.ArgumentParser()

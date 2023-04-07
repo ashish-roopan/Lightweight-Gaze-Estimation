@@ -6,7 +6,7 @@ import torch
 import mediapipe as mp
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
-from models.GenderNet import GenderNet
+from models.AgeGenderNet import AgeGenderNet 
 
 
 def detect_face(image):
@@ -94,16 +94,9 @@ std = torch.tensor([0.229, 0.224, 0.225], dtype=torch.float32, device=device)
 
 
 #.​‌‍‌𝗣𝗿𝗲𝗽𝗮𝗿𝗲 𝗠𝗼𝗱𝗲𝗹    ​                					
-model = GenderNet()
+model = AgeGenderNet()
 model = model.to(args.device)
-
-# import torch._dynamo as dynamo
-# torch._dynamo.config.verbose = True
-# torch.backends.cudnn.benchmark = True
-# model = torch.compile(model, mode="max-autotune", fullgraph=False)
-# print("Model compiled set")
-
-model = torch.compile(model)
+# model = torch.compile(model)
 checkpoint = torch.load(args.model_path)
 model.load_state_dict(checkpoint['model'])
 model.eval()

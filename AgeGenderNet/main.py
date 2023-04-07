@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
 
-from models.GenderNet import GenderNet
+from models.AgeGenderNet import AgeGenderNet
 from dataloaders.dataloader import get_dataloader
 from scripts.train import train_epoch
 from scripts.validate import valid_epoch
@@ -115,7 +115,7 @@ print('len(valid_dataset): ', len(valid_dataset))
 print('len(test_dataset): ', len(test_dataset))
 
 #>           ​‌‍‌𝗣𝗿𝗲𝗽𝗮𝗿𝗲 𝗠𝗼𝗱𝗲𝗹    ​                					
-model = GenderNet()
+model = AgeGenderNet()
 model = model.to(args.device)
 # model = torch.compile(model)
 
@@ -127,7 +127,8 @@ momentum = 0.9
 weight_decay = args.weight_decay
 epochs = args.num_epochs
 criterion = nn.BCELoss()
-reg_criterion = nn.MSELoss()
+# reg_criterion = nn.MSELoss()
+reg_criterion = nn.L1Loss()
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
 # scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[500], gamma=0.1)

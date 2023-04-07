@@ -4,12 +4,7 @@ import sys
 import numpy as np
 
 sys.path.append('.')
-from models.GenderNet import GenderNet
-
-import torch._dynamo
-# torch._dynamo.reset()
-torch._dynamo.config.verbose=True
-torch._dynamo.config.suppress_errors = True
+from models.AgeGenderNet import GenderNet
 
 def parse_args():
     parser = argparse.ArgumentParser()

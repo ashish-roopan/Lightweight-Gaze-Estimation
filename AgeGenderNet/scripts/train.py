@@ -11,7 +11,8 @@ def train_epoch(model, dataloader, criterion, reg_criterion, optimizer, schedule
 
         gender_loss = criterion(pred_genders, gt_genders)
         age_loss = reg_criterion(pred_ages, gt_ages)
-        loss = gender_loss + 2 * age_loss
+        # loss = gender_loss + age_loss
+        loss = gender_loss 
         
         optimizer.zero_grad()
         loss.backward()

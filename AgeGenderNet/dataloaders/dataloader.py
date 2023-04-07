@@ -14,7 +14,12 @@ class custom_dataset(Dataset):
 		self.images = os.listdir(self.img_dir) 
 
 		#. filter out ages below 5
-		self.images = [img for img in self.images if int(img.split('_')[0]) >= 5]  
+		# self.images = [img for img in self.images if int(img.split('_')[0]) >= 5]  
+
+		print(f'Number of images in {split} set: {len(self.images)}')
+		#. filer out images without gender == 1 or 0
+		self.images = [img for img in self.images if int(img.split('_')[1]) in [0, 1]]
+		print(f'Number of images in {split} set after filtering gender: {len(self.images)}')
 
 		if index is not None:
 			self.images = self.images[index[0]:index[1]]
